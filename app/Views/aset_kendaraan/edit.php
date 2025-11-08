@@ -100,9 +100,17 @@ Edit Aset Kendaraan: <?= $kendaraan['nopol'] ?>
                     </div>
 
                     <div class="mb-3">
-                        <label for="pajak" class="form-label">Tanggal Jatuh Tempo Pajak</label>
+                        <label for="pajak" class="form-label">Tanggal Jatuh Tempo Pajak 5 Tahun</label>
                         <input type="date" name="pajak" id="pajak" class="form-control"
                             value="<?= $kendaraan['pajak'] ?>">
+                        <div class="form-text">Tanggal ini digunakan sebagai acuan untuk monitoring pajak kendaraan.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="pajak_setahun" class="form-label">Tanggal Jatuh Tempo Pajak Tahunan</label>
+                        <input type="date" name="pajak_setahun" id="pajak_setahun" class="form-control"
+                            value="<?= $kendaraan['pajak_setahun'] ?>">
                         <div class="form-text">Tanggal ini digunakan sebagai acuan untuk monitoring pajak kendaraan.
                         </div>
                     </div>

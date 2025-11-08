@@ -130,7 +130,7 @@ Daftar Aset Tanah & Bangunan
             <table id="tanahTable" class="table table-bordered table-striped" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>No.</th>
                         <th>Lokasi</th>
                         <th>Luas Tanah (M²)</th>
                         <th>Luas Bangunan (M²)</th>
@@ -258,15 +258,17 @@ $(document).ready(function() {
 
     <?php if ($hasFullAccess): ?>
     // LOGIKA MODAL HAPUS
-    $('.delete-btn').on('click', function() {
+    $(document).on('click', '.delete-btn', function() {
         var asetId = $(this).data('id');
-        var asetNama = $(this).data('lokasi'); // Mengambil lokasi sebagai nama aset
+        var asetNama = $(this).data('lokasi');
 
+        // Isi data ke modal
         $('#asetNama').text(asetNama);
-
         var deleteUrl = '<?= site_url('asettanahbangunan/delete/') ?>' + asetId;
-
         $('#confirmDeleteLink').attr('href', deleteUrl);
+
+        // Pastikan modal tampil
+        $('#confirmDeleteModal').modal('show');
     });
     <?php endif; ?>
 });

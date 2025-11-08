@@ -51,6 +51,16 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->post('users/update/(:num)', 'User::update/$1');
     $routes->get('users/delete/(:num)', 'User::delete/$1');
 
+    // --- MANAJEMEN PERSONEL (PERSONEL) ---
+    $routes->get('personel', 'Personel::index');
+    $routes->get('personel/create', 'Personel::create');
+    $routes->post('personel/store', 'Personel::store');
+    $routes->get('personel/edit/(:num)', 'Personel::edit/$1');
+    $routes->post('personel/update/(:num)', 'Personel::update/$1');
+    $routes->get('personel/delete/(:num)', 'Personel::delete/$1');
+    $routes->get('personel/getJabatanByPenempatan/(:num)', 'Personel::getJabatanByPenempatan/$1');
+
+
     // --- MANAJEMEN MITRA KERJA ---
     $routes->get('mitra', 'MitraKerja::index');
     $routes->get('mitra/create', 'MitraKerja::create');

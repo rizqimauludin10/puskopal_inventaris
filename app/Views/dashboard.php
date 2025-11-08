@@ -72,16 +72,83 @@ Dashboard Utama Inventaris Aset
         opacity: 0;
     }
 }
+
+/* Animasi muncul halus dari bawah */
+@keyframes fadeSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animasi muncul dari atas */
+@keyframes fadeSlideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Terapkan animasi ke elemen */
+.greeting {
+    animation: fadeSlideDown 0.8s ease forwards;
+}
+
+.dashboard-title {
+    animation: fadeSlideUp 0.4s ease forwards;
+    animation-delay: 0.3s;
+    opacity: 0;
+}
+
+.dashboard-desc {
+    animation: fadeSlideUp 1.2s ease forwards;
+    animation-delay: 0.4s;
+    opacity: 0;
+}
+
+.badge-animate {
+    animation: fadeSlideUp 1.4s ease forwards;
+    animation-delay: 0.7s;
+    opacity: 0;
+}
+
+.mitrakerja-card {
+    animation: fadeSlideUp 1.5s ease forwards;
+    animation-delay: 0.3s;
+    opacity: 0;
+}
+
+.unit-kendaraan-card {
+    animation: fadeSlideUp 1.5s ease forwards;
+    animation-delay: 0.3s;
+    opacity: 0;
+}
+
+.unit-properti-card {
+    animation: fadeSlideUp 1.5s ease forwards;
+    animation-delay: 0.3s;
+    opacity: 0;
+}
+
+.total-personel-card {
+    animation: fadeSlideUp 1.5s ease forwards;
+    animation-delay: 0.3s;
+    opacity: 0;
+}
 </style>
 
 
 <?php 
-    // ========================================================================
-    // CATATAN PENTING:
-    // Pastikan di Controller Anda, Anda telah mengisi variabel $assets 
-    // dengan data aset properti yang memiliki kolom 'id', 'lokasi', 'latitude',
-    // dan 'longitude' dari database.
-    // ========================================================================
     
     // --- SIMULASI DATA ASET PROPERTI (Hapus ini jika sudah diisi di Controller) ---
     $assets = $assets ?? [];
@@ -89,17 +156,33 @@ Dashboard Utama Inventaris Aset
     // Encode data aset properti untuk digunakan oleh JavaScript di bagian <script>
     $assets_json = json_encode($assets);
 ?>
+<?php
+        // Mendapatkan URI untuk menandai menu aktif
+        $uri = service('uri');
+        $currentPath = $uri->getPath();
+        $session = session();
+    ?>
 
 <div class="mb-5 p-4 border-bottom">
     <div class="row align-items-center">
+        <!-- Greeting -->
         <div class="col-md-9">
-            <h1 class="display-5 fw-bold mb-1 text-dark">Ringkasan PKS & Inventaris Aset</h1>
-            <p class="lead text-muted">
-                Status terkini dari seluruh aset perusahaan dan Perjanjian Kerja Sama (PKS) dengan Mitra.
+            <h6 class="fw-bold text-dark greeting">
+                <?= greeting(); ?>, <?= esc($session->get('nama_lengkap') ?? 'Pengguna'); ?> 👋
+            </h6>
+        </div>
+
+        <!-- Judul Dashboard -->
+        <div class="col-md-9">
+            <h1 class="display-5 fw-bold mb-1 text-dark dashboard-title">Dashboard Utama</h1>
+            <p class="lead text-muted dashboard-desc">
+                Lihat ringkasan data dan pembaruan terbaru dari seluruh data yang tersedia.
             </p>
         </div>
+
+        <!-- Badge Tanggal -->
         <div class="col-md-3 text-md-end">
-            <span class="badge bg-primary py-2 px-3 shadow-sm">
+            <span class="badge bg-primary py-2 px-3 shadow-sm badge-animate">
                 <i class="fas fa-calendar-alt me-1"></i> Data Hari Ini: <?= date('d M Y') ?>
             </span>
         </div>
@@ -108,7 +191,7 @@ Dashboard Utama Inventaris Aset
 <!-- --- Kartu KPI Utama --- -->
 <div class="row mb-5">
     <!-- Total Mitra Kerja -->
-    <div class="col-lg-3 col-md-6 mb-4">
+    <div class="col-lg-3 col-md-6 mb-4 mitrakerja-card">
         <div class="card border-start border-4 border-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -126,7 +209,7 @@ Dashboard Utama Inventaris Aset
     </div>
 
     <!-- Total PKS Tercatat -->
-    <div class="col-lg-3 col-md-6 mb-4">
+    <!-- <div class="col-lg-3 col-md-6 mb-4">
         <div class="card border-start border-4 border-success shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -141,10 +224,10 @@ Dashboard Utama Inventaris Aset
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- PKS Akan Kadaluarsa (Peringatan Penting) -->
-    <div class="col-lg-3 col-md-6 mb-4">
+    <!-- <div class="col-lg-3 col-md-6 mb-4">
         <div class="card border-start border-4 border-danger shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -161,11 +244,11 @@ Dashboard Utama Inventaris Aset
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Total Unit Kendaraan -->
     <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card border-start border-4 border-info shadow h-100 py-2">
+        <div class="card border-start border-4 border-info shadow h-100 py-2 unit-kendaraan-card">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col me-2">
@@ -183,7 +266,7 @@ Dashboard Utama Inventaris Aset
 
     <!-- Total Unit Properti -->
     <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card border-start border-4 border-success shadow h-100 py-2">
+        <div class="card border-start border-4 border-success shadow h-100 py-2 unit-properti-card">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col me-2">
@@ -199,8 +282,28 @@ Dashboard Utama Inventaris Aset
         </div>
     </div>
 
+    <!-- Total Personel -->
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card border-start border-4 border-success shadow h-100 py-2 total-personel-card">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Personel</div>
+                        <div class="h5 mb-0 fw-bold text-gray-800">
+                            <!-- !!BELUM DI PERBAHARUI -->
+                            0 Personel
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Total Luas Tanah (M²) -->
-    <div class="col-lg-3 col-md-12 mb-4">
+    <!-- <div class="col-lg-3 col-md-12 mb-4">
         <div class="card border-start border-4 border-warning shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -216,10 +319,10 @@ Dashboard Utama Inventaris Aset
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Total Bangunan (M²) -->
-    <div class="col-lg-3 col-md-12 mb-4">
+    <!-- <div class="col-lg-3 col-md-12 mb-4">
         <div class="card border-start border-4 border-secondary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -235,7 +338,7 @@ Dashboard Utama Inventaris Aset
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
 <!-- --- Chart Section --- -->
@@ -290,6 +393,220 @@ Dashboard Utama Inventaris Aset
 
 <!-- --- Peringatan Section --- -->
 <div class="row">
+    <!-- Dokumen Aset Mendekati Kedaluwarsa -->
+    <!-- ========== TABEL ASET KENDARAAN ========== -->
+
+    <div class="col-12">
+        <div class="card shadow mb-4 border-left-warning">
+            <div class="card-header bg-warning text-dark py-3">
+                <h6 class="m-0 fw-bold">
+                    <i class="fas fa-calendar-alt me-2"></i> Peringatan: Dokumen Aset Kendaraan Mendekati Kedaluwarsa
+                    Pajak Tahunan
+                </h6>
+                <div class="form-text text-dark-50">
+                    Daftar kendaraan dengan masa berlaku <strong>(Pajak Tahunan)</strong> yang akan habis dalam 60 hari
+                    ke
+                    depan.
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped align-middle">
+                        <thead class="table-info">
+                            <tr>
+                                <th>No. Polisi</th>
+                                <th>Merk</th>
+                                <th>Dokumen</th>
+                                <th>Berlaku s/d</th>
+                                <th>Catatan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                        $foundTahunan = false; 
+                        if (!empty($summary['expiring_tahunan'])): 
+                            foreach ($summary['expiring_tahunan'] as $doc): 
+                                // Hanya tampilkan data pajak tahunan
+                                if (($doc['jenis'] ?? null) == 'Kendaraan' && strpos($doc['dokumen'], 'Tahunan') !== false): 
+                                    $foundTahunan = true;
+                        ?>
+                            <tr class="table-warning">
+                                <td><?= esc($doc['lokasi_id'] ?? 'N/A') ?></td>
+                                <td><?= esc($doc['merk'] ?? 'N/A') ?></td>
+                                <td><?= esc($doc['dokumen'] ?? 'N/A') ?></td>
+                                <td>
+                                    <span class="fw-bold text-dark">
+                                        <?= date('d M Y', strtotime($doc['berlaku_sd'] ?? 'now')) ?>
+                                    </span>
+                                </td>
+                                <td><?= esc($doc['catatan'] ?? 'N/A') ?></td>
+                                <td>
+                                    <a href="<?= $doc['url'] ?? '#' ?>"
+                                        class="btn btn-sm btn-warning text-dark shadow-sm">
+                                        <i class="fas fa-edit me-1"></i> Perbarui
+                                    </a>
+                                </td>
+                            </tr>
+                            <?php 
+                                endif; 
+                            endforeach; 
+                        endif; 
+                        if (!$foundTahunan): 
+                        ?>
+                            <tr>
+                                <td colspan="6" class="text-center text-success fw-bold">
+                                    Tidak ada pajak tahunan kendaraan yang akan kedaluwarsa dalam waktu dekat.
+                                </td>
+                            </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card shadow mb-4 border-left-info">
+            <div class="card-header bg-warning text-dark py-3">
+                <h6 class="m-0 fw-bold">
+                    <i class="fas fa-car me-2"></i> Peringatan: Dokumen Aset Kendaraan Mendekati Kedaluwarsa 5 Tahunan
+                </h6>
+                <div class="form-text text-dark-50">
+                    Daftar dokumen kendaraan <strong>(Pajak 5 Tahunan)</strong> yang akan habis masa berlakunya dalam 90
+                    hari
+                    ke depan.
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped align-middle">
+                        <thead class="table-info">
+                            <tr>
+                                <th>No. Polisi</th>
+                                <th>Merk</th>
+                                <th>Dokumen</th>
+                                <th>Berlaku s/d</th>
+                                <th>Catatan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                        $foundVehicle = false; 
+                        if (!empty($summary['expiring_5_tahunan'])): 
+                            foreach ($summary['expiring_5_tahunan'] as $doc): 
+                                if (($doc['jenis'] ?? null) == 'Kendaraan'): 
+                                    $foundVehicle = true;
+                        ?>
+                            <tr class="table-warning">
+                                <td><?= esc($doc['lokasi_id'] ?? 'N/A') ?></td>
+                                <td><?= esc($doc['merk'] ?? 'N/A') ?></td>
+                                <td><?= esc($doc['dokumen'] ?? 'N/A') ?></td>
+                                <td>
+                                    <span class="fw-bold text-dark">
+                                        <?= date('d M Y', strtotime($doc['berlaku_sd'] ?? 'now')) ?>
+                                    </span>
+                                </td>
+                                <td><?= esc($doc['catatan'] ?? 'N/A') ?></td>
+                                <td>
+                                    <a href="<?= $doc['url'] ?? '#' ?>"
+                                        class="btn btn-sm btn-warning text-white shadow-sm">
+                                        <i class="fas fa-edit me-1"></i> Perbarui
+                                    </a>
+                                </td>
+                            </tr>
+                            <?php 
+                                endif; 
+                            endforeach; 
+                        endif; 
+                        if (!$foundVehicle): 
+                        ?>
+                            <tr>
+                                <td colspan="6" class="text-center text-success fw-bold">
+                                    Tidak ada dokumen kendaraan yang akan kedaluwarsa dalam waktu dekat.
+                                </td>
+                            </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- ========== TABEL ASET PROPERTI ========== -->
+    <div class="col-12">
+        <div class="card shadow mb-4 border-left-success">
+            <div class="card-header bg-danger text-white py-3">
+                <h6 class="m-0 fw-bold">
+                    <i class="fas fa-building me-2"></i> Peringatan: Dokumen Aset Properti Mendekati Kedaluwarsa
+                </h6>
+                <div class="form-text text-white-50">
+                    Daftar dokumen properti (Sertifikat, Sewa, Izin, dsb.) yang akan habis masa berlakunya dalam 90 hari
+                    ke depan.
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped align-middle">
+                        <thead class="table-info">
+                            <tr>
+                                <th>ID/Lokasi</th>
+                                <th>Dokumen</th>
+                                <th>Berlaku s/d</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                        $foundProperty = false; 
+                        if (!empty($summary['expiring_properti'])): 
+                            foreach ($summary['expiring_properti'] as $doc): 
+                                if (($doc['jenis'] ?? null) == 'Properti'): 
+                                    $foundProperty = true;
+                        ?>
+                            <tr class="table-warning">
+                                <td><?= esc($doc['lokasi_id'] ?? 'N/A') ?></td>
+                                <td><?= esc($doc['dokumen'] ?? 'N/A') ?></td>
+                                <td>
+                                    <span class="fw-bold text-dark">
+                                        <?= date('d M Y', strtotime($doc['berlaku_sd'] ?? 'now')) ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="<?= $doc['url'] ?? '#' ?>" class="btn btn-sm btn-success shadow-sm">
+                                        <i class="fas fa-edit me-1"></i> Perbarui
+                                    </a>
+                                </td>
+                            </tr>
+                            <?php 
+                                endif; 
+                            endforeach; 
+                        endif; 
+                        if (!$foundProperty): 
+                        ?>
+                            <tr>
+                                <td colspan="5" class="text-center text-success fw-bold">
+                                    Tidak ada dokumen properti yang akan kedaluwarsa dalam waktu dekat.
+                                </td>
+                            </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- PKS Mendekati Kedaluwarsa -->
     <div class="col-12 mb-4">
         <div class="card shadow border-left-danger">
@@ -302,7 +619,7 @@ Dashboard Utama Inventaris Aset
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-sm table-striped">
-                        <thead>
+                        <thead class="table-info">
                             <tr>
                                 <th>Judul PKS</th>
                                 <th>Mitra Kerja</th>
@@ -342,59 +659,6 @@ Dashboard Utama Inventaris Aset
                             <tr>
                                 <td colspan="5" class="text-center text-success fw-bold">Tidak ada PKS yang mendesak
                                     kadaluarsa dalam waktu 90 hari.</td>
-                            </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Dokumen Aset Mendekati Kedaluwarsa -->
-    <div class="col-12">
-        <div class="card shadow mb-4 border-left-danger">
-            <div class="card-header bg-danger text-white py-3">
-                <h6 class="m-0 fw-bold"><i class="fas fa-exclamation-triangle me-2"></i> Peringatan: Dokumen Aset
-                    Mendekati Kedaluwarsa</h6>
-                <div class="form-text text-white-50">Daftar dokumen (Pajak, Sertifikat, Sewa) yang akan habis masa
-                    berlakunya dalam 90 hari ke depan.</div>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-sm table-striped">
-                        <thead>
-                            <tr>
-                                <th>Jenis Aset</th>
-                                <th>ID/Lokasi</th>
-                                <th>Dokumen</th>
-                                <th>Berlaku s/d</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($summary['expiring_docs'])): ?>
-                            <?php foreach ($summary['expiring_docs'] as $doc): ?>
-                            <tr class="table-warning">
-                                <td><span
-                                        class="badge <?= ($doc['jenis'] ?? null) == 'Kendaraan' ? 'bg-info' : 'bg-success' ?>"><?= esc($doc['jenis'] ?? 'N/A') ?></span>
-                                </td>
-                                <td><?= esc($doc['lokasi_id'] ?? 'N/A') ?></td>
-                                <td><?= esc($doc['dokumen'] ?? 'N/A') ?></td>
-                                <td><span
-                                        class="fw-bold"><?= date('d M Y', strtotime($doc['berlaku_sd'] ?? 'now')) ?></span>
-                                </td>
-                                <td>
-                                    <a href="<?= $doc['url'] ?? '#' ?>" class="btn btn-sm btn-danger">
-                                        <i class="fas fa-edit me-1"></i> Perbarui
-                                    </a>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                            <?php else: ?>
-                            <tr>
-                                <td colspan="5" class="text-center text-success fw-bold">Tidak ada dokumen yang akan
-                                    kedaluwarsa dalam waktu dekat.</td>
                             </tr>
                             <?php endif; ?>
                         </tbody>
@@ -478,7 +742,7 @@ async function setupMap() {
         const bounds = new google.maps.LatLngBounds();
         const infoWindow = new google.maps.InfoWindow();
         const invisibleMarkers = [];
-        const pulseOverlays = []; // simpan overlay agar bisa dikontrol nanti
+        const pulseOverlays = [];
 
         // Tambahkan setiap aset ke map
         ASSET_DATA.forEach(asset => {
@@ -545,6 +809,7 @@ async function setupMap() {
 
             pulseOverlay.setMap(map);
             pulseOverlays.push(pulseOverlay);
+
         });
 
         // Sesuaikan tampilan peta
@@ -566,35 +831,34 @@ async function setupMap() {
                     const color =
                         count < 10 ? "#4137d0ff" :
                         count < 50 ? "#ffc107" : "#dc3545";
-                    if (showAsCluster || count > 1) {
-                        const svg = `
+                    const svg = `
                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
                     <circle cx="25" cy="25" r="25" fill="${color}" opacity="0.85"/>
                     <text x="25" y="30" text-anchor="middle" fill="#fff" 
-                          font-size="16" font-weight="bold">${count}</text>
+                        font-size="16" font-weight="bold">${count}</text>
                 </svg>`;
-                        return new google.maps.Marker({
-                            position,
-                            icon: {
-                                url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
-                                    svg),
-                                scaledSize: new google.maps.Size(50, 50),
-                            },
-                            zIndex: google.maps.Marker.MAX_ZINDEX + count,
-                        });
-                    }
+                    return new google.maps.Marker({
+                        position,
+                        icon: {
+                            url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg),
+                            scaledSize: new google.maps.Size(50, 50),
+                        },
+                        zIndex: google.maps.Marker.MAX_ZINDEX + count,
+                    });
                 },
             },
         });
+
         // 🔍 Kontrol visibilitas pulse marker berdasarkan zoom
         map.addListener("zoom_changed", () => {
             const zoom = map.getZoom();
             pulseOverlays.forEach(overlay => {
                 if (overlay.div) {
-                    overlay.div.style.display = zoom >= 15 ? "block" : "none";
+                    overlay.div.style.display = zoom >= 10 ? "block" : "none";
                 }
             });
         });
+
 
     } catch (err) {
         console.error("Map error:", err);
@@ -607,8 +871,6 @@ async function setupMap() {
 
 document.addEventListener("DOMContentLoaded", setupMap);
 </script>
-
-
 
 <script>
 $(document).ready(function() {
