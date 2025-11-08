@@ -12,6 +12,9 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.min.css">
 
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="<?= base_url('logo/logo_puskopal.png') ?>">
 
@@ -145,6 +148,14 @@
                         </a>
                     </li>
 
+                    <!-- Personel -->
+                    <li class="nav-item">
+                        <a class="nav-link <?= strpos($currentPath, 'personel') !== false ? 'active' : '' ?>"
+                            href="<?= site_url('personel') ?>">
+                            <i class="fas fa-users"></i> Personel
+                        </a>
+                    </li>
+
 
                     <!-- Divider -->
                     <li class="nav-item mx-2 d-none d-lg-block">
@@ -265,6 +276,8 @@
 
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
 

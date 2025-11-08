@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Models\PerjanjianKerjasamaModel;
+use App\Models\PerjanjianKerjaSamaModel;
 use App\Models\MitraKerjaModel;
 use CodeIgniter\Controller; // Menggunakan CodeIgniter\Controller
 
@@ -13,7 +13,7 @@ class Pks extends Controller
 
     public function __construct()
     {
-        $this->pksModel = new PerjanjianKerjasamaModel();
+        $this->pksModel = new PerjanjianKerjaSamaModel();
         $this->mitraModel = new MitraKerjaModel();
         
         // Proteksi login: Cek apakah user sudah login

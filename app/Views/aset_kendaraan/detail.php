@@ -37,7 +37,7 @@ Detail Aset: <?= $aset['nopol'] ?>
     <div class="row align-items-center">
         <div class="col-md-7">
             <h1 class="display-6 fw-bold mb-1 text-dark">
-                Detail Aset: <?= $aset['jenis_kendaraan'] ?> <?= $aset['merk'] ?>
+                Detail Aset: <?= $aset['merk'] ?>
             </h1>
             <p class="lead text-muted">
                 Nomor Polisi: <span class="badge bg-secondary fs-6"><?= $aset['nopol'] ?></span>
@@ -117,11 +117,20 @@ Detail Aset: <?= $aset['nopol'] ?>
                     </li>
 
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <strong>Masa Berlaku STNK</strong>
+                        <strong>Masa Berlaku Pajak 5 Tahun </strong>
                         <span>
                             <?= ($aset['pajak'] == '0000-00-00' || empty($aset['pajak'])) 
                                 ? '<span class="text-muted fst-italic">Tidak Ditentukan</span>' 
                                 : date('d-m-Y', strtotime($aset['pajak'])) ?>
+                        </span>
+                    </li>
+
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Masa Berlaku Pajak 1 Tahun </strong>
+                        <span>
+                            <?= ($aset['pajak_setahun'] == '0000-00-00' || empty($aset['pajak_setahun'])) 
+                                ? '<span class="text-muted fst-italic">Tidak Ditentukan</span>' 
+                                : date('d-m-Y', strtotime($aset['pajak_setahun'])) ?>
                         </span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -142,7 +151,7 @@ Detail Aset: <?= $aset['nopol'] ?>
                         <?php endif; ?>
                     </li>
                     <li class="list-group-item">
-                        <strong> Catatan Tambahan** </strong>
+                        <strong> Catatan Tambahan </strong>
                         <p class="mt-2 mb-0 border-top pt-2 text-dark fst-italic fw-bold fs-4">
                             <?= nl2br($aset['catatan']) ?: 'Tidak ada catatan khusus.' ?>
                         </p>

@@ -79,7 +79,7 @@ class AsetKendaraan extends Controller
                 session()->setFlashdata('error', 'Format file harus PDF!');
                 return redirect()->back()->withInput();
             }
-            $MAX_SIZE_BYTES = 5 * 1024 * 1024; 
+            $MAX_SIZE_BYTES = 10 * 1024 * 1024; 
             if ($fileDokumen->getSize() > $MAX_SIZE_BYTES) { 
                 session()->setFlashdata('error', 'Ukuran file dokumen maksimal 5MB!');
                 return redirect()->back()->withInput();
@@ -101,6 +101,7 @@ class AsetKendaraan extends Controller
             'bpkb'            => $this->request->getPost('bpkb'),
             'kondisi'         => $this->request->getPost('kondisi'),
             'pajak'           => $this->request->getPost('pajak'),
+            'pajak_setahun'   => $this->request->getPost('pajak_setahun'),
             'catatan'         => $this->request->getPost('catatan'),
             'dokumen'         => $namaDokumen,
         ]);
@@ -165,7 +166,7 @@ class AsetKendaraan extends Controller
                 session()->setFlashdata('error', 'Format file harus PDF!');
                 return redirect()->back()->withInput();
             }
-            $MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
+            $MAX_SIZE_BYTES = 10 * 1024 * 1024; // 5MB
             if ($fileDokumen->getSize() > $MAX_SIZE_BYTES) { 
                 session()->setFlashdata('error', 'Ukuran file dokumen maksimal 5MB!');
                 return redirect()->back()->withInput();
@@ -193,6 +194,7 @@ class AsetKendaraan extends Controller
             'bpkb'            => $this->request->getPost('bpkb'),
             'kondisi'         => $this->request->getPost('kondisi'),
             'pajak'           => $this->request->getPost('pajak'),
+            'pajak_setahun'   => $this->request->getPost('pajak_setahun'),
             'catatan'         => $this->request->getPost('catatan'),
             'dokumen'         => $namaDokumen,
         ]);
@@ -270,6 +272,7 @@ class AsetKendaraan extends Controller
             'BPKB', 
             'Kondisi', 
             'Status Pajak', 
+            'Pajak Tahunan',
             'Catatan', 
             'Nama Dokumen'
         ], $separator);
@@ -290,6 +293,7 @@ class AsetKendaraan extends Controller
                 $row['bpkb'],
                 $kondisiFormatted,
                 $row['pajak'],
+                $row['pajak_setahun'],
                 $row['catatan'],
                 $row['dokumen'], // Hanya nama file
             ], $separator);

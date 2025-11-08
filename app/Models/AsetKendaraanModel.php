@@ -19,6 +19,7 @@ class AsetKendaraanModel extends Model
         'bpkb',
         'kondisi',
         'pajak',
+        'pajak_setahun',
         'catatan',
         'dokumen',
     ];

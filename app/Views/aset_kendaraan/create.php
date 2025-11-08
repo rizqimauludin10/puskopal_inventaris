@@ -104,9 +104,16 @@ Tambah Aset Kendaraan Baru
                     </div>
 
                     <div class="mb-3">
-                        <label for="pajak" class="form-label">Tanggal Jatuh Tempo Pajak</label>
+                        <label for="pajak" class="form-label">Tanggal Jatuh Tempo Pajak 5 Tahun</label>
                         <input type="date" name="pajak" id="pajak" class="form-control">
-                        <div class="form-text">Tanggal ini digunakan sebagai acuan untuk monitoring pajak kendaraan.
+                        <div class="form-text">Tanggal ini digunakan untuk pajak 5 tahunan.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="pajak_setahun" class="form-label">Tanggal Jatuh Tempo Pajak Tahunan</label>
+                        <input type="date" name="pajak_setahun" id="pajak_setahun" class="form-control">
+                        <div class="form-text">Tanggal ini digunakan untuk pajak tahunan.
                         </div>
                     </div>
 

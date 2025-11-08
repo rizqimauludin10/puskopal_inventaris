@@ -219,7 +219,7 @@ class MitraKerja extends Controller
         }
 
         // Ambil daftar PKS terkait mitra
-        $pksModel = new \App\Models\PerjanjianKerjasamaModel();
+        $pksModel = new \App\Models\PerjanjianKerjaSamaModel();
         $pksList  = $pksModel->where('mitra_id', $mitraId)->orderBy('tanggal_mulai', 'ASC')->findAll();
 
         $data = [

@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\AsetKendaraanModel;
 use App\Models\AsetTanahBangunanModel;
-use App\Models\PerjanjianKerjasamaModel;
+use App\Models\PerjanjianKerjaSamaModel;
 use App\Models\MitraKerjaModel;
 
 class Dashboard extends BaseController
@@ -20,7 +20,7 @@ class Dashboard extends BaseController
         $this->kendaraanModel = new AsetKendaraanModel();
         $this->tanahModel = new AsetTanahBangunanModel();
         $this->mitraModel = new MitraKerjaModel();
-        $this->pksModel = new PerjanjianKerjasamaModel();
+        $this->pksModel = new PerjanjianKerjaSamaModel();
     }
 
     /**
@@ -96,8 +96,11 @@ class Dashboard extends BaseController
             'chart_tanah_kepemilikan' => $chartProperti,
             
             // Peringatan Kadaluarsa
-            'expiring_docs' => $expiringDocs,
+            // 'expiring_docs' => $expiringDocs,
             
+            'expiring_5_tahunan' => $expiringDocs['pajak_5_tahunan'],
+            'expiring_tahunan'   => $expiringDocs['pajak_tahunan'],
+            'expiring_properti'  => $expiringDocs['properti'],
             // PKS & Mitra KPIs
             'totalMitra' => $totalMitra,
             'totalPks' => $totalPks,
@@ -167,12 +170,17 @@ class Dashboard extends BaseController
 
     private function getExpiringDocuments()
     {
-        $limitDate   = date('Y-m-d', strtotime('+90 days'));
-        $currentDate = date('Y-m-d');
-        $expiring    = [];
+        $limitDate5Th   = date('Y-m-d', strtotime('+90 days')); // Batas 90 hari utk pajak 5 tahunan
+        $limitDate1Th   = date('Y-m-d', strtotime('+60 days')); // Batas 60 hari utk pajak tahunan
+        $currentDate    = date('Y-m-d');
+
+        // Siapkan array terpisah
+        $expiring5Th    = [];
+        $expiring1Th    = [];
+        $expiringProperti = [];
 
         // ============================
-        // 1️⃣ Data Kendaraan
+        // Data Kendaraan 5 Tahunan
         // ============================
         $expKendaraan = $this->kendaraanModel
             ->where('pajak IS NOT NULL')
@@ -181,31 +189,64 @@ class Dashboard extends BaseController
         foreach ($expKendaraan as $item) {
             $pajakDate = $item['pajak'];
 
-            // Lewati jika kosong atau 0000-00-00
             if (empty($pajakDate) || $pajakDate === '0000-00-00') continue;
 
-            // Tentukan status
             if ($pajakDate < $currentDate) {
                 $status = 'Overdue';
-            } elseif ($pajakDate <= $limitDate) {
+            } elseif ($pajakDate <= $limitDate5Th) {
                 $status = 'Expiring Soon';
             } else {
-                continue; // masih jauh, tidak perlu ditampilkan
+                continue;
             }
 
-            $expiring[] = [
+            $expiring5Th[] = [
                 'jenis'       => 'Kendaraan',
                 'id'          => $item['id'],
                 'lokasi_id'   => $item['nopol'],
-                'dokumen'     => 'Pajak STNK',
+                'merk'        => $item['merk'],
+                'dokumen'     => 'Ganti Plat Nomor (5 Tahunan)',
                 'berlaku_sd'  => $pajakDate,
                 'status'      => $status,
+                'catatan'     => $item['catatan'],
                 'url'         => site_url('asetkendaraan/edit/' . $item['id']),
             ];
         }
 
         // ============================
-        // 2️⃣ Data Properti
+        // Pajak Tahunan
+        // ============================
+        $expPajakSetahun = $this->kendaraanModel
+            ->where('pajak_setahun IS NOT NULL')
+            ->findAll();
+
+        foreach ($expPajakSetahun as $item) {
+            $pajakDate2 = $item['pajak_setahun'];
+
+            if (empty($pajakDate2) || $pajakDate2 === '0000-00-00') continue;
+
+            if ($pajakDate2 < $currentDate) {
+                $status = 'Overdue';
+            } elseif ($pajakDate2 <= $limitDate1Th) {
+                $status = 'Expiring Soon';
+            } else {
+                continue;
+            }
+
+            $expiring1Th[] = [
+                'jenis'       => 'Kendaraan',
+                'id'          => $item['id'],
+                'lokasi_id'   => $item['nopol'],
+                'merk'        => $item['merk'],
+                'dokumen'     => 'Pajak Tahunan',
+                'berlaku_sd'  => $pajakDate2,
+                'status'      => $status,
+                'catatan'     => $item['catatan'],
+                'url'         => site_url('asetkendaraan/edit/' . $item['id']),
+            ];
+        }
+
+        // ============================
+        // Data Properti
         // ============================
         $expProperti = $this->tanahModel
             ->where('berlaku IS NOT NULL')
@@ -214,19 +255,17 @@ class Dashboard extends BaseController
         foreach ($expProperti as $item) {
             $berlakuDate = $item['berlaku'];
 
-            // Lewati jika kosong atau 0000-00-00
             if (empty($berlakuDate) || $berlakuDate === '0000-00-00') continue;
 
-            // Tentukan status
             if ($berlakuDate < $currentDate) {
                 $status = 'Overdue';
-            } elseif ($berlakuDate <= $limitDate) {
+            } elseif ($berlakuDate <= $limitDate5Th) {
                 $status = 'Expiring Soon';
             } else {
                 continue;
             }
 
-            $expiring[] = [
+            $expiringProperti[] = [
                 'jenis'       => 'Properti',
                 'id'          => $item['id'],
                 'lokasi_id'   => $item['lokasi'],
@@ -238,14 +277,28 @@ class Dashboard extends BaseController
         }
 
         // ============================
-        // 3️⃣ Urutkan berdasarkan tanggal terdekat
+        // Urutkan berdasarkan tanggal
         // ============================
-        usort($expiring, function($a, $b) {
-            return strtotime($a['berlaku_sd']) - strtotime($b['berlaku_sd']);
-        });
+        $sortByDate = function (&$array) {
+            usort($array, function ($a, $b) {
+                return strtotime($a['berlaku_sd']) - strtotime($b['berlaku_sd']);
+            });
+        };
 
-        return $expiring;
+        $sortByDate($expiring5Th);
+        $sortByDate($expiring1Th);
+        $sortByDate($expiringProperti);
+
+        // ============================
+        // Return hasil terpisah
+        // ============================
+        return [
+            'pajak_5_tahunan' => $expiring5Th,
+            'pajak_tahunan'   => $expiring1Th,
+            'properti'        => $expiringProperti,
+        ];
     }
+
 
 
 }
