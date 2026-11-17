@@ -149,9 +149,7 @@ Dashboard Utama Inventaris Aset
 
 
 <?php 
-    
-    // --- SIMULASI DATA ASET PROPERTI (Hapus ini jika sudah diisi di Controller) ---
-    $assets = $assets ?? [];
+
     
     // Encode data aset properti untuk digunakan oleh JavaScript di bagian <script>
     $assets_json = json_encode($assets);
@@ -208,44 +206,6 @@ Dashboard Utama Inventaris Aset
         </div>
     </div>
 
-    <!-- Total PKS Tercatat -->
-    <!-- <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card border-start border-4 border-success shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col me-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total PKS Tercatat</div>
-                        <div class="h5 mb-0 fw-bold text-gray-800">
-                            <?= number_format($summary['totalPks'] ?? 0, 0, ',', '.') ?> Dokumen</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-file-contract fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- PKS Akan Kadaluarsa (Peringatan Penting) -->
-    <!-- <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card border-start border-4 border-danger shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col me-2">
-                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                            PKS Akan Kadaluarsa (90 Hari)
-                        </div>
-                        <div class="h5 mb-0 fw-bold text-gray-800">
-                            <?= number_format($summary['expiringPks'] ?? 0, 0, ',', '.') ?> PKS</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
     <!-- Total Unit Kendaraan -->
     <div class="col-lg-3 col-md-6 mb-4">
         <div class="card border-start border-4 border-info shadow h-100 py-2 unit-kendaraan-card">
@@ -266,11 +226,11 @@ Dashboard Utama Inventaris Aset
 
     <!-- Total Unit Properti -->
     <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card border-start border-4 border-success shadow h-100 py-2 unit-properti-card">
+        <div class="card border-start border-4 border-primary shadow h-100 py-2 unit-properti-card">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col me-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Unit Properti</div>
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Unit Properti</div>
                         <div class="h5 mb-0 fw-bold text-gray-800">
                             <?= number_format($summary['total_aset_tanah'] ?? 0, 0, ',', '.') ?> Unit</div>
                     </div>
@@ -288,57 +248,28 @@ Dashboard Utama Inventaris Aset
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col me-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Personel</div>
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Total Personel
+                        </div>
                         <div class="h5 mb-0 fw-bold text-gray-800">
-                            <!-- !!BELUM DI PERBAHARUI -->
-                            0 Personel
+                            <?= count($summary['personelAll'] ?? []) ?> Personel
                         </div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-users fa-2x text-gray-300"></i>
                     </div>
                 </div>
+
+                <!-- Tombol lihat semua -->
+                <div class="mt-3 text-end">
+                    <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
+                        data-bs-target="#modalSemuaPenempatan">
+                        <i class="fas fa-eye me-1"></i> Lihat Semua
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Total Luas Tanah (M²) -->
-    <!-- <div class="col-lg-3 col-md-12 mb-4">
-        <div class="card border-start border-4 border-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col me-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total Luas Tanah (M²)
-                        </div>
-                        <div class="h5 mb-0 fw-bold text-gray-800">
-                            <?= number_format($summary['total_luas_tanah'] ?? 0, 0, ',', '.') ?> M²</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-chart-area fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- Total Bangunan (M²) -->
-    <!-- <div class="col-lg-3 col-md-12 mb-4">
-        <div class="card border-start border-4 border-secondary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col me-2">
-                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">Total Bangunan (M²)
-                        </div>
-                        <div class="h5 mb-0 fw-bold text-gray-800">
-                            <?= number_format($summary['total_luas_bangunan'] ?? 0, 0, ',', '.') ?> M²</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-warehouse fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
 </div>
 
 <!-- --- Chart Section --- -->
@@ -381,7 +312,7 @@ Dashboard Utama Inventaris Aset
             </div>
             <div class="card-body p-0">
                 <!-- Kontainer Peta -->
-                <div id="map" style="height: 600px; border-radius: 0; border: none;">
+                <div id="map" style="height: 500px; border-radius: 0; border: none;">
                     <div class="d-flex align-items-center justify-content-center h-100 text-muted">
                         Memuat peta...
                     </div>
@@ -393,9 +324,131 @@ Dashboard Utama Inventaris Aset
 
 <!-- --- Peringatan Section --- -->
 <div class="row">
+    <!-- Personel BP Mendekati Habis Masa Berlaku -->
+    <div class="col-12">
+        <div class="card shadow mb-4 border-left-info">
+            <div class="card-header bg-info text-white py-3">
+                <h6 class="m-0 fw-bold">
+                    <i class="fas fa-birthday-cake me-2"></i> Ulang Tahun Bulan <?= date('F') ?>
+                </h6>
+            </div>
+            <div class="card-body">
+                <?php if (!empty($summary['personelUltah'])): ?>
+                <div class="d-flex flex-wrap gap-2">
+                    <?php foreach ($summary['personelUltah'] as $p): 
+                        $tglLahir = new DateTime($p['tanggal_lahir']);
+                        $usia = $tglLahir->diff(new DateTime())->y;
+                    ?>
+                    <div class="badge bg-light text-dark shadow-sm p-3 border">
+                        <i class="fas fa-user text-info me-1"></i>
+                        <strong><?= esc($p['nama']) ?></strong><br>
+                        <small>
+                            <?= format_tanggal_singkat($p['tanggal_lahir']) ?>
+                            (<?= $usia ?> th)</small><br>
+                        <small class="text-muted"><?= esc($p['keterangan']) ?>-<?= esc($p['nama_penempatan']) ?></small>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php else: ?>
+                <p class="text-center text-success fw-bold mb-0">
+                    Tidak ada personel yang berulang tahun di bulan ini.
+                </p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card shadow mb-4 border-left-warning">
+            <div class="card-header bg-warning text-dark py-3">
+                <h6 class="m-0 fw-bold">
+                    <i class="fas fa-user-clock me-2"></i> Peringatan: Personel BP dan Perja Mendekati Akhir Masa
+                    Berlaku
+                </h6>
+                <div class="form-text text-dark-50">
+                    Daftar personel dengan status <strong>BP (Bawah Perintah)</strong> dan <strong>Perja (Perjanjian
+                        Kerja)</strong> yang masa berlakunya akan
+                    habis
+                    dalam <strong>60 hari</strong> ke depan.
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped align-middle">
+                        <thead class="table-info">
+                            <tr>
+                                <th style="width:5%">No</th>
+                                <th>Nama</th>
+                                <th>Pangkat</th>
+                                <th>Penempatan</th>
+                                <th>Status</th>
+                                <th>Masa Berlaku</th>
+                                <th class="text-center">Sisa Hari</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                $foundBP = false;
+                if (!empty($summary['personelBP'])): 
+                    $foundBP = true;
+                    $no = 1;
+                    foreach ($summary['personelBP'] as $p): 
+                        $masaBerlaku = new DateTime($p['berlaku']);
+                        $today = new DateTime();
+                        $interval = $today->diff($masaBerlaku);
+                        $sisaHari = (int)$interval->format('%r%a'); // bisa negatif jika sudah lewat
+                        
+                        // Tentukan badge color
+                        if ($sisaHari < 0) {
+                            $badgeClass = 'bg-secondary'; // sudah lewat
+                            $sisaText = 'Overdue';
+                        } elseif ($sisaHari <= 60) {
+                            $badgeClass = 'bg-danger'; // mendekati kadaluarsa
+                            $sisaText = $sisaHari . ' Hari Lagi';
+                        } else {
+                            $badgeClass = 'bg-success';
+                            $sisaText = $sisaHari . ' Hari Lagi';
+                        }
+                ?>
+                            <tr class="table-warning">
+                                <td class="text-center"><?= $no++ ?></td>
+                                <td><?= esc($p['nama']) ?></td>
+                                <td><?= esc($p['keterangan']) ?></td>
+                                <td><?= esc($p['nama_penempatan']) ?></td>
+                                <td><?= esc($p['status']) ?></td>
+                                <td>
+                                    <span class="fw-bold text-dark">
+                                        <?= format_tanggal_singkat($p['berlaku']) ?>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge <?= $badgeClass ?> text-white">
+                                        <?= $sisaText ?>
+                                    </span>
+                                </td>
+                            </tr>
+                            <?php 
+                    endforeach; 
+                endif; 
+
+                if (!$foundBP): 
+                ?>
+                            <tr>
+                                <td colspan="6" class="text-center text-success fw-bold">
+                                    Tidak ada personel BP dan Perja yang masa berlakunya akan habis dalam waktu dekat.
+                                </td>
+                            </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Dokumen Aset Mendekati Kedaluwarsa -->
     <!-- ========== TABEL ASET KENDARAAN ========== -->
-
     <div class="col-12">
         <div class="card shadow mb-4 border-left-warning">
             <div class="card-header bg-warning text-dark py-3">
@@ -438,7 +491,8 @@ Dashboard Utama Inventaris Aset
                                 <td><?= esc($doc['dokumen'] ?? 'N/A') ?></td>
                                 <td>
                                     <span class="fw-bold text-dark">
-                                        <?= date('d M Y', strtotime($doc['berlaku_sd'] ?? 'now')) ?>
+                                        <?= format_tanggal_singkat($doc['berlaku_sd']) ?? 'now' ?>
+
                                     </span>
                                 </td>
                                 <td><?= esc($doc['catatan'] ?? 'N/A') ?></td>
@@ -467,6 +521,7 @@ Dashboard Utama Inventaris Aset
             </div>
         </div>
     </div>
+
     <div class="col-12">
         <div class="card shadow mb-4 border-left-info">
             <div class="card-header bg-warning text-dark py-3">
@@ -507,7 +562,8 @@ Dashboard Utama Inventaris Aset
                                 <td><?= esc($doc['dokumen'] ?? 'N/A') ?></td>
                                 <td>
                                     <span class="fw-bold text-dark">
-                                        <?= date('d M Y', strtotime($doc['berlaku_sd'] ?? 'now')) ?>
+                                        <?= format_tanggal_singkat($doc['berlaku_sd']) ?? 'now' ?>
+
                                     </span>
                                 </td>
                                 <td><?= esc($doc['catatan'] ?? 'N/A') ?></td>
@@ -536,10 +592,6 @@ Dashboard Utama Inventaris Aset
             </div>
         </div>
     </div>
-
-
-
-
 
     <!-- ========== TABEL ASET PROPERTI ========== -->
     <div class="col-12">
@@ -578,7 +630,7 @@ Dashboard Utama Inventaris Aset
                                 <td><?= esc($doc['dokumen'] ?? 'N/A') ?></td>
                                 <td>
                                     <span class="fw-bold text-dark">
-                                        <?= date('d M Y', strtotime($doc['berlaku_sd'] ?? 'now')) ?>
+                                        <?= format_tanggal_singkat($doc['berlaku_sd']) ?? 'now' ?>
                                     </span>
                                 </td>
                                 <td>
@@ -605,7 +657,6 @@ Dashboard Utama Inventaris Aset
             </div>
         </div>
     </div>
-
 
     <!-- PKS Mendekati Kedaluwarsa -->
     <div class="col-12 mb-4">
@@ -642,7 +693,8 @@ Dashboard Utama Inventaris Aset
                                 </td>
                                 <td>
                                     <?php if ($tanggalBerakhir && strtotime($tanggalBerakhir)): ?>
-                                    <span class="fw-bold"><?= date('d M Y', strtotime($tanggalBerakhir)) ?></span>
+                                    <span class="fw-bold">
+                                        <?= format_tanggal_singkat($tanggalBerakhir) ?? 'now' ?></span>
                                     <?php else: ?>
                                     <span class="fw-bold text-muted">Tanggal Tidak Valid</span>
                                     <?php endif; ?>
@@ -668,6 +720,59 @@ Dashboard Utama Inventaris Aset
         </div>
     </div>
 </div>
+
+<!-- Modal Daftar Penempatan -->
+<div class="modal fade" id="modalSemuaPenempatan" tabindex="-1" aria-labelledby="modalLabelPenempatan"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="modalLabelPenempatan">
+                    <i class="fas fa-building me-2"></i> Daftar Jumlah Personel per Penempatan
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="searchPenempatan" class="form-control mb-3" placeholder="Cari penempatan...">
+                <?php if (!empty($summary['personelPerPenempatan'])): ?>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead class="table-success text-center align-middle">
+                            <tr>
+                                <th style="width:5%">No</th>
+                                <th>Nama Penempatan</th>
+                                <th>Militer</th>
+                                <th>PNS</th>
+                                <th>PPPK</th>
+                                <th>Karyawan</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $no = 1; foreach ($summary['personelPerPenempatan'] as $item): ?>
+                            <tr>
+                                <td class="text-center"><?= $no++ ?></td>
+                                <td><?= esc($item['nama_penempatan']) ?></td>
+                                <td class="text-center text-primary fw-bold"><?= $item['total_militer'] ?></td>
+                                <td class="text-center text-success fw-bold"><?= $item['total_pns'] ?></td>
+                                <td class="text-center text-success fw-bold"><?= $item['total_pppk'] ?></td>
+                                <td class="text-center text-warning fw-bold"><?= $item['total_karyawan'] ?></td>
+                                <td class="text-center fw-bold"><?= $item['total_personel'] ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php else: ?>
+                <p class="text-center text-muted mb-0">Tidak ada data penempatan tersedia.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 <?= $this->endSection() ?>
 
@@ -958,6 +1063,15 @@ $(document).ready(function() {
 
     // 2. Inisialisasi Chart Kepemilikan Tanah
     createPieChart('tanahKepemilikanChart', dataKepemilikan, 'Distribusi Bukti Kepemilikan Properti');
+});
+</script>
+
+<script>
+document.getElementById('searchPenempatan').addEventListener('keyup', function() {
+    const filter = this.value.toLowerCase();
+    document.querySelectorAll('#modalSemuaPenempatan tbody tr').forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(filter) ? '' : 'none';
+    });
 });
 </script>
 

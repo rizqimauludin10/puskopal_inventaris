@@ -58,7 +58,12 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->get('personel/edit/(:num)', 'Personel::edit/$1');
     $routes->post('personel/update/(:num)', 'Personel::update/$1');
     $routes->get('personel/delete/(:num)', 'Personel::delete/$1');
+    $routes->get('personel/detail/(:num)', 'Personel::show/$1');
+    $routes->get('personel/exportExcel', 'Personel::exportExcel'); 
     $routes->get('personel/getJabatanByPenempatan/(:num)', 'Personel::getJabatanByPenempatan/$1');
+    $routes->get('/rekap', 'Rekap::index');
+    $routes->get('/rekap/getPersonelByPenempatan/(:num)', 'Rekap::getPersonelByPenempatan/$1');
+
 
 
     // --- MANAJEMEN MITRA KERJA ---

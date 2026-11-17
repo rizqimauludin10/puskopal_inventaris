@@ -10,5 +10,5 @@ class PangkatModel extends Model
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
-    protected $allowedFields    = ['nama_pangkat', 'keterangan', 'status'];
+    protected $allowedFields    = ['nama_pangkat', 'keterangan', 'kategori'];
 }

@@ -164,7 +164,7 @@ Daftar Aset Tanah & Bangunan
                                 if (empty($row['berlaku']) || $row['berlaku'] === '0000-00-00'): ?>
                             <span class="text-muted fst-italic">Tidak memiliki masa berlaku</span>
                             <?php else: ?>
-                            <?= $row['berlaku'] ?>
+                            <?= date('d-m-Y', strtotime($row['berlaku'])) ?>
                             <?php endif; ?>
                         </td>
                         <td><?= $row['keterangan'] ?></td>

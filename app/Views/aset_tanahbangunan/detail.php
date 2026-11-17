@@ -111,7 +111,7 @@ Detail Aset Properti: <?= esc($tanah['lokasi']) ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <strong>Masa Berlaku s/d</strong>
                         <?php
-                        $berlaku = $tanah['berlaku'];
+                        $berlaku = date('d-m-Y', strtotime($tanah['berlaku']));
                         // Cek jika nilainya adalah '0000-00-00' atau kosong/null
                         $isPermanent = (empty($berlaku) || $berlaku === '0000-00-00');
                         // Gunakan pesan khusus dari permintaan user
@@ -120,7 +120,6 @@ Detail Aset Properti: <?= esc($tanah['lokasi']) ?>
                         <span class="<?= $isPermanent ? 'text-secondary fst-italic' : '' ?>">
                             <?= esc($displayText) ?>
                         </span>
-
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <strong>Dokumen Legalitas</strong>
