@@ -6,6 +6,7 @@ use App\Models\AsetKendaraanModel;
 use App\Models\AsetTanahBangunanModel;
 use App\Models\PerjanjianKerjaSamaModel;
 use App\Models\MitraKerjaModel;
+use App\Models\PersonelModel;
 
 class Dashboard extends BaseController
 {
@@ -13,6 +14,7 @@ class Dashboard extends BaseController
     protected $tanahModel;
     protected $mitraModel;
     protected $pksModel;
+    protected $personelModel;
 
     public function __construct()
     {
@@ -21,6 +23,7 @@ class Dashboard extends BaseController
         $this->tanahModel = new AsetTanahBangunanModel();
         $this->mitraModel = new MitraKerjaModel();
         $this->pksModel = new PerjanjianKerjaSamaModel();
+        $this->personelModel = new PersonelModel();
     }
 
     /**
@@ -47,6 +50,13 @@ class Dashboard extends BaseController
         // Mitra & PKS
         $totalMitra = $this->mitraModel->countAll();
         $totalPks = $this->pksModel->getTotalPks();
+
+        $personelPerPenempatan = $this->personelModel->getPersonelPerPenempatan();
+        $personelAll = $this->personelModel->getFullData();
+        $personelBP = $this->personelModel->getExpiringBP(60);
+
+        $personelUltah = $this->personelModel->getPersonelUltahBulanIni();
+
         
         // --- FITUR BARU PKS KADALUARSA (90 HARI) DENGAN DEDUPLIKASI ---
         $rawExpiringPksList = $this->pksModel->getExpiringPksList(90);
@@ -108,6 +118,11 @@ class Dashboard extends BaseController
             // PKS Kadaluarsa (Data yang sudah bersih)
             'expiringPks' => $expiringPksCount, // Total Count
             'expiringPksList' => $expiringPksList, // List Detail PKS
+            
+            'personelPerPenempatan' => $personelPerPenempatan,
+            'personelAll'  => $personelAll,
+            'personelBP'   => $personelBP,
+            'personelUltah' => $personelUltah,
         ];
 
         $data['summary'] = $summary;

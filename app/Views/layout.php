@@ -232,10 +232,6 @@
         </div>
     </div>
 
-    <!-- <div id="splash-logo">
-        <img src="<?= base_url('logo/logo_puskopal.png') ?>" alt="Logo SIAKOPAL" class="logo-animate">
-    </div> -->
-
 
     <!-- Footer -->
     <footer class="bg-light border-top py-4 mt-5">
@@ -261,15 +257,6 @@
             </div>
         </div>
     </footer>
-
-    <script>
-    window.addEventListener("load", function() {
-        const splash = document.getElementById("splash-logo");
-        setTimeout(() => {
-            splash.classList.add("fade-out");
-        }, 100); // cepat, setengah detik aja
-    });
-    </script>
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

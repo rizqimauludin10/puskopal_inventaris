@@ -51,7 +51,7 @@ Daftar Personel
         $total = count($personel);
         $tetap = count(array_filter($personel, fn($p) => $p['status'] === 'Tetap'));
         $bp = count(array_filter($personel, fn($p) => $p['status'] === 'BP'));
-        $kontrak = count(array_filter($personel, fn($p) => $p['status'] === 'Perjanjian Kontrak'));
+        $kerja = count(array_filter($personel, fn($p) => $p['status'] === 'Perjanjian Kerja'));
     ?>
 
     <div class="col-lg-3 col-md-6 mb-4">
@@ -101,8 +101,8 @@ Daftar Personel
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <div class="text-xs fw-bold text-danger text-uppercase mb-1">Personel Kontrak</div>
-                        <div class="h5 mb-0 fw-bold text-gray-800"><?= $kontrak ?> Orang</div>
+                        <div class="text-xs fw-bold text-danger text-uppercase mb-1">Personel Perja</div>
+                        <div class="h5 mb-0 fw-bold text-gray-800"><?= $kerja ?> Orang</div>
                     </div>
                     <i class="fas fa-user-tie fa-2x text-gray-300"></i>
                 </div>
@@ -116,9 +116,18 @@ Daftar Personel
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
         <h6 class="m-0 fw-bold text-primary">Data Personel</h6>
         <?php if ($hasFullAccess): ?>
-        <a href="<?= site_url('personel/exportExcel') ?>" class="btn btn-success btn-sm shadow-sm">
-            <i class="fas fa-file-excel me-1"></i> Export Excel
-        </a>
+
+        <div class="btn-group shadow-sm" role="group" aria-label="Aksi Data">
+
+            <a href="<?= site_url('rekap') ?>" class="btn btn-primary btn-sm ">
+                <i class="fas fa-chart-bar me-1"></i> Rekap Data
+            </a>
+
+            <a href="<?= site_url('personel/exportExcel') ?>" class="btn btn-success btn-sm">
+                <i class="fas fa-file-excel me-1"></i> Export Excel
+            </a>
+
+        </div>
         <?php endif; ?>
     </div>
 
@@ -129,10 +138,10 @@ Daftar Personel
                     <tr>
                         <th>No.</th>
                         <th>Foto</th>
-                        <th>Nama</th>
-                        <th>Pangkat</th>
-                        <th>Jabatan</th>
-                        <th>Penempatan</th>
+                        <th width="18%">Nama</th>
+                        <th width="10%">Pangkat / Korps</th>
+                        <th width="10%">Penempatan</th>
+                        <th width="15%">Jabatan</th>
                         <th>Status</th>
                         <th>Berlaku</th>
                         <th>Aksi</th>
@@ -147,16 +156,16 @@ Daftar Personel
                             <img src="<?= base_url('uploads/personel/' . $row['foto']) ?>" alt="Foto" class="rounded"
                                 width="70" height="100">
                             <?php else: ?>
-                            <img src="<?= base_url('assets/img/default-user.png') ?>" alt="Default" width="50"
-                                height="50" class="rounded-circle">
+                            <img src="<?= base_url('assets/img/image-default.jpg') ?>" alt="Default" class="rounded"
+                                width="70" height="100">
                             <?php endif; ?>
                         </td>
                         <td><?= esc($row['nama']) ?></td>
                         <td><?= esc($row['keterangan']) ?> <br>
-                            <span class="badge bg-secondary"><?= $row['status'] ?></span>
+                            <span class="badge bg-secondary"><?= $row['korps'] ?></span>
                         </td>
-                        <td><?= esc($row['nama_jabatan']) ?></td>
                         <td><?= esc($row['nama_penempatan']) ?></td>
+                        <td><?= esc($row['nama_jabatan']) ?></td>
                         <td>
                             <?php if ($row['status'] == 'Tetap'): ?>
                             <span class="badge bg-success"><?= $row['status'] ?></span>
@@ -169,7 +178,7 @@ Daftar Personel
                         <td><?= $row['berlaku'] ? date('d-m-Y', strtotime($row['berlaku'])) : '-' ?></td>
                         <td class="text-center">
                             <a href="<?= site_url('personel/detail/' . $row['id']) ?>"
-                                class="btn btn-sm btn-info me-1"><i class="fas fa-eye"></i></a>
+                                class="btn btn-sm btn-info me-1 btn-detail"><i class="fas fa-eye"></i></a>
                             <?php if ($hasFullAccess): ?>
                             <a href="<?= site_url('personel/edit/' . $row['id']) ?>"
                                 class="btn btn-sm btn-warning me-1"><i class="fas fa-edit"></i></a>
@@ -216,9 +225,11 @@ Daftar Personel
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
+
 <script>
 $(document).ready(function() {
-    $('#personelTable').DataTable({
+    // Inisialisasi DataTable dan simpan instance ke variabel
+    const table = $('#personelTable').DataTable({
         pageLength: 10,
         lengthMenu: [5, 10, 25, 50],
         language: {
@@ -235,13 +246,30 @@ $(document).ready(function() {
         }
     });
 
-    // Auto close alert
+    // === Restore halaman terakhir dari sessionStorage ===
+    const savedPage = sessionStorage.getItem('personel_lastPage');
+    if (savedPage !== null) {
+        table.page(parseInt(savedPage)).draw('page');
+        sessionStorage.removeItem('personel_lastPage');
+    }
+
+    // === Simpan halaman aktif sebelum buka detail ===
+    $(document).on('mousedown click', '.btn-detail', function() {
+        try {
+            const currentPage = table.page(); // index halaman saat ini
+            sessionStorage.setItem('personel_lastPage', currentPage);
+        } catch (err) {
+            console.warn('Gagal menyimpan page:', err);
+        }
+    });
+
+    // === Auto close alert ===
     const alertElement = $('.alert-dismissible');
     if (alertElement.length) {
         setTimeout(() => alertElement.alert('close'), 5000);
     }
 
-    // Event delete modal
+    // === Event delete modal ===
     $(document).on('click', '.delete-btn', function() {
         const id = $(this).data('id');
         const nama = $(this).data('nama');
@@ -251,5 +279,6 @@ $(document).ready(function() {
     });
 });
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 <?= $this->endSection() ?>
